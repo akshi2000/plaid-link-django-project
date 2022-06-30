@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link Account</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div style="text-align: center;" class="mt-5">
+    <button id="link-button" class="btn btn-warning mt-5">Click here to link you account</button>
+  </div>
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Plaid CDN -->
+<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+
+
+<!-- JavaScript Code -->
+<script type="text/javascript">
+      var url = 'http://localhost:1337'
+      var url2 = 'http://localhost:1338'
+      async function getlinktoken() {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Token ${window.localStorage.token}`);
+        myHeaders.append("Content-Type", "application/json");
+        data = {
+          method: "POST",
+          headers: myHeaders,
+        }
+        const response = await fetch(`${url}/getlinktoken/`, data);
+        const responseJSON = await response.json();
+        console.log(responseJSON.link_token);
+        return responseJSON.link_token
+      }
+  (async function($) {
+    var handler = Plaid.create({
+    token: await getlinktoken(),
+    onSuccess: async function(public_token, metadata) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Token ${window.localStorage.token}`);
+      myHeaders.append("Content-Type", "application/json");
+      console.log("Public-token:", public_token)
+      const data = await fetch(`${url}/getaccesstoken/`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+          public_token: public_token,
+        }),
+      });
+      if(data.status===401) 
+        window.location.replace(`${url2}/login.html`)
+    },
+    onExit: function(err, metadata) {
+      window.location.replace(`${url2}/login.html`)
+    },
+    onEvent: function(eventName, metadata) {
+    }
+    });
+    $('#link-button').on('click', function(e) {
+      handler.open();
+    });
+  })(jQuery);
+</script>
+</body>
+</html>

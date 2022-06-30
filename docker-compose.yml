@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  django-server:
+    build: ./BM_core
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./BM_core/:/usr/src/app/
+    ports:
+      - 1337:8000
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-ijc$$5l%ls1o74ikutum@=x)b@r#)2(cv@zyj@j9z2)ki2hhdi7
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - redis
+
+  frontend:
+    image: nginx:latest
+    volumes:
+      - ./BM_frontend:/usr/share/nginx/html
+    ports:
+      - 1338:80
+
+  redis:
+    image: redis:alpine
+
+  celery:
+    build: ./BM_core
+    command: celery -A BM_core worker -E -l info
+    volumes:
+      - ./BM_core/:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-ijc$$5l%ls1o74ikutum@=x)b@r#)2(cv@zyj@j9z2)ki2hhdi7
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - redis
+
