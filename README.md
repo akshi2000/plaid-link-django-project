@@ -87,7 +87,7 @@ POST /logout
 
 | Header     | Description                                                   |
 | :------------ | :------------------------------------------------------------ |
-| `Authorization`        | **Required**. Bearer Token |
+| `Authorization`        | **Required**. Auth Token |
 
 ### Response
 
@@ -104,7 +104,7 @@ POST /getlinktoken
 
 | Header     | Description                                                   |
 | :------------ | :------------------------------------------------------------ |
-| `Authorization`        | **Required**. Bearer Token |
+| `Authorization`        | **Required**. Auth Token |
 
 ### Responses
 
@@ -124,12 +124,12 @@ POST /getaccesstoken
 
 | Header     | Description                                                   |
 | :------------ | :------------------------------------------------------------ |
-| `Authorization`        | **Required**. Bearer Token |
+| `Authorization`        | **Required**. Auth Token |
 
 
 | Parameter | Type      | Description                                                   |
 | :-------- | :-------- | :------------------------------------------------------------ |
-| `public-token`    | `string` | **Required**. Public-Toekn received after successfull link |
+| `public_token`    | `string` | **Required**. Public-Toekn received after successfull link |
 
 ### Responses
 
@@ -147,7 +147,7 @@ POST /getaccountdata
 ```
 | Header     | Description                                                   |
 | :------------ | :------------------------------------------------------------ |
-| `Authorization`        | **Required**. Bearer Token |
+| `Authorization`        | **Required**. Auth Token |
 
 ### Response
 
@@ -225,7 +225,7 @@ POST /gettransactions
 ```
 | Header     | Description                                                   |
 | :------------ | :------------------------------------------------------------ |
-| `Authorization`        | **Required**. Bearer Token |
+| `Authorization`        | **Required**. Auth Token |
 
 ### Response
 
@@ -356,7 +356,7 @@ POST /gettransactions
 ![Screenshot from 2022-06-30 23-29-12](https://user-images.githubusercontent.com/26035412/176759759-67f64368-f7ce-4aee-b975-f862c26200ff.png)
 ![Screenshot from 2022-06-30 23-29-48](https://user-images.githubusercontent.com/26035412/176759807-f07af98a-3bf3-453f-9083-86d9f3c0a6be.png)
 
-- **In case to not ready content on the plaid server, aync fetch task will be retried after some delay**
+- **In case if the requested resource is not ready on the plaid server, async fetch task will be retried after some delay**
 
 ![Screenshot from 2022-06-30 23-47-26](https://user-images.githubusercontent.com/26035412/176759913-d83adf52-c3a2-408b-b224-d75b77fdd441.png)
 
